@@ -14,6 +14,10 @@ The specification changes through an RFC-lite process. The bar is deliberately s
 
 3. The PR updates, together: SPEC.md, schema/amr.schema.json, the examples, and rationale.md — the four must stay field-for-field identical — plus a CHANGELOG.md entry.
 
+## Adding your implementation
+
+The Implementations list in [README.md](README.md#implementations) is open, and the bar is deliberately low: one line, a tool that actually reads or writes AMR records, and a link to it. Open a PR adding that line — no issue or rationale required.
+
 ## Versioning
 
 Semantic versioning of the specification: incompatible field changes bump the major version, compatible additions bump the minor version. Experimental fields live under the `x-` prefix and need no process at all.
