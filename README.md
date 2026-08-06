@@ -56,7 +56,7 @@ If your project's memory follows the rules, add the badge to your README — it 
 ## Related work
 
 - [AGENTS.md](https://agents.md) — the sibling convention for agent *instructions*. AMR standardizes agent *memory records*; the two compose — an AGENTS.md file tells the agent how to behave, AMR defines the shape of what it writes down.
-- [memory-hygiene-bench](https://github.com/sleepsweet/memory-hygiene-bench) — open benchmark measuring the cost of degraded agent memory.
+- [memory-hygiene-bench](https://github.com/sleepsweet/memory-hygiene-bench) — open benchmark measuring the cost of degraded agent memory; an intervention benchmark measuring the effect of these rules is being developed there.
 
 ## Contributing
 
