@@ -30,3 +30,4 @@ Notes:
 
 - The lite prefix lists the five most commonly written types; the full specification also defines `note` and admits `x-` extensions ([SPEC.md, section 2.2](SPEC.md#22-type)).
 - A normalizer is any tool that performs the derivation — the reference implementation is listed in the [README](README.md#implementations), and the derivation is simple enough to implement in a shell script.
+- When resolving replacement links, note that a correction keeps the `event_time` of the record it corrects — the world did not change, the record was wrong ([SPEC.md, section 4](SPEC.md#4-supersession-is-not-correction)). A normalizer that requires the replacement to be strictly newer will miss correction pairs; compare with "newer or equal".
