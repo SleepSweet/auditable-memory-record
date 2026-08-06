@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/sleepsweet/auditable-memory-record/main/schema/amr.schema.json",
+  "title": "Auditable Memory Record",
+  "description": "A single AI agent memory record per the AMR specification v0.1. Required fields are AMR-Core; required plus all optional fields are AMR-Extended.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier of the record within its store."
+    },
+    "type": {
+      "type": "string",
+      "description": "Record type: one of the core types or an x- extension.",
+      "anyOf": [
+        { "enum": ["fact", "instruction", "preference", "decision", "note", "gotcha"] },
+        { "pattern": "^x-" }
+      ]
+    },
+    "content": {
+      "type": "string",
+      "description": "The text of the record."
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "SHA-256 of the exact content bytes (UTF-8)."
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "enum": ["stated", "derived", "fetched", "inferred"],
+          "description": "How the record was obtained."
+        },
+        "source_ref": {
+          "type": "string",
+          "description": "Reference to the source: file, URL, message."
+        },
+        "agent": {
+          "type": "string",
+          "description": "Identifier of the writing agent."
+        },
+        "model": {
+          "type": "string",
+          "description": "Model that produced the record."
+        }
+      },
+      "required": ["channel"],
+      "patternProperties": { "^x-": {} },
+      "additionalProperties": false
+    },
+    "event_time": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[0-9:.]+(Z|[+-][0-9:]+)?)?$",
+      "description": "When the fact became true in the world (ISO 8601 date or timestamp)."
+    },
+    "recorded_time": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[0-9:.]+(Z|[+-][0-9:]+)?)?$",
+      "description": "When the record was written (ISO 8601 date or timestamp)."
+    },
+    "status": {
+      "enum": ["active", "superseded", "corrected", "quarantined", "stale"],
+      "description": "Lifecycle status; history is marked, never deleted."
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "id of the record this one replaces."
+    },
+    "superseded_by": {
+      "type": "string",
+      "description": "id of the record that replaces this one."
+    },
+    "redaction_applied": {
+      "type": "object",
+      "properties": {
+        "applied": {
+          "type": "boolean",
+          "description": "Whether redaction ran before the record was persisted."
+        },
+        "kinds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Kinds of redaction applied, e.g. secret, email, phone."
+        }
+      },
+      "required": ["applied"],
+      "additionalProperties": false
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "AMR specification version the record conforms to."
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "content",
+    "content_hash",
+    "provenance",
+    "event_time",
+    "recorded_time",
+    "status",
+    "schema_version"
+  ],
+  "patternProperties": { "^x-": {} },
+  "additionalProperties": false
+}

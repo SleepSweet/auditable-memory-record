@@ -1,0 +1,19 @@
+{
+  "id": "ff85e2e5-407b-4cd3-8f49-b8c7d2ff2491",
+  "type": "fact",
+  "content": "The staging database was migrated to PostgreSQL 17; the old MySQL instance is read-only.",
+  "content_hash": "sha256:76735ee33de12734553bf1d4f22ab8968ace4810ffc43c4bb7f300b961e4eb63",
+  "provenance": {
+    "channel": "stated",
+    "source_ref": "chat message from the project owner, 2026-07-14",
+    "agent": "cli-coding-agent",
+    "model": "example-model-1"
+  },
+  "event_time": "2026-07-14",
+  "recorded_time": "2026-07-14T18:22:05Z",
+  "status": "active",
+  "redaction_applied": {
+    "applied": false
+  },
+  "schema_version": "0.1"
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "48836679-96fe-4af1-af1f-dda8dde5744c",
+    "type": "fact",
+    "content": "API rate limit is 60 requests per minute per token.",
+    "content_hash": "sha256:ea9185db920711bc2e36e55437a541045c122f732a7aee1b7f5ecd3f923b0961",
+    "provenance": {
+      "channel": "derived",
+      "source_ref": "docs/api.md, commit 4f2c9a1",
+      "agent": "cli-coding-agent",
+      "model": "example-model-1"
+    },
+    "event_time": "2026-05-02",
+    "recorded_time": "2026-05-02T09:15:40Z",
+    "status": "superseded",
+    "superseded_by": "67cb1b2d-9e38-40fd-997a-46575cc76c4c",
+    "redaction_applied": {
+      "applied": false
+    },
+    "schema_version": "0.1"
+  },
+  {
+    "id": "67cb1b2d-9e38-40fd-997a-46575cc76c4c",
+    "type": "fact",
+    "content": "API rate limit is 120 requests per minute per token.",
+    "content_hash": "sha256:ff984944109de8ab1a50c63ac18682cba48519b58c9e0363a6ebf50fb1050cc5",
+    "provenance": {
+      "channel": "stated",
+      "source_ref": "chat message from the platform team, 2026-08-01",
+      "agent": "cli-coding-agent",
+      "model": "example-model-1"
+    },
+    "event_time": "2026-08-01",
+    "recorded_time": "2026-08-01T14:03:12Z",
+    "status": "active",
+    "supersedes": "48836679-96fe-4af1-af1f-dda8dde5744c",
+    "redaction_applied": {
+      "applied": false
+    },
+    "schema_version": "0.1"
+  }
+]
