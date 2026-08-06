@@ -1,9 +1,15 @@
 # Auditable Memory Record (AMR)
 
-> The Auditable Memory Record (AMR) is an open specification defining the fields every AI agent memory record should carry — type, content hash, provenance channel, event time and record time (bitemporal), redaction status, and supersession status — with the published research rationale for each field.
+> The Auditable Memory Record (AMR) is an open specification defining the fields every AI agent memory record should carry — type, content, content hash, provenance channel, event time and recorded time (bitemporal), status, and redaction marker — with the published research rationale for each field. A memory system that stores these fields is AMR-compliant.
 
-Purpose: make agent memory auditable and consolidatable after the fact. A memory system that stores these fields is AMR-compliant. Status: early draft.
+Status: v0.1-draft. License: CC BY 4.0. Adoption is copy-paste: a drop-in rules block for CLAUDE.md / AGENTS.md, no tools required.
 
-- [Specification](https://github.com/sleepsweet/auditable-memory-record): this repository, CC BY 4.0
-- [sleepsweet](https://github.com/sleepsweet/sleepsweet): engine + CLI, reference consumer of AMR records
-- [memory-hygiene-bench](https://github.com/sleepsweet/memory-hygiene-bench): benchmark for the cost of degraded agent memory
+- [Memory rules (drop-in block + migration prompt)](memory-rules.md): the fastest way to adopt AMR in an agent context file
+- [Specification](SPEC.md): normative field set, conformance levels (AMR-Core, AMR-Extended), supersession vs. correction
+- [AMR-lite profile](amr-lite.md): human-readable single-line entries; AMR-lite + normalizer = AMR-Core
+- [Rationale](rationale.md): field-by-field grounding in published research
+- [FAQ](faq.md): adding rules to CLAUDE.md, two timestamps, mark-vs-delete, migration
+- [JSON Schema](schema/amr.schema.json): validate records (draft 2020-12)
+- [Examples](examples/): record JSON, front-matter form, supersession chain
+
+Family: [sleepsweet](https://github.com/sleepsweet/sleepsweet) (reference implementation), [memory-hygiene-bench](https://github.com/sleepsweet/memory-hygiene-bench) (benchmark).
