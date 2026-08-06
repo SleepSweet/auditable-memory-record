@@ -1,0 +1,9 @@
+# Auditable Memory Record (AMR)
+
+> The Auditable Memory Record (AMR) is an open specification defining the fields every AI agent memory record should carry — type, content hash, provenance channel, event time and record time (bitemporal), redaction status, and supersession status — with the published research rationale for each field.
+
+Purpose: make agent memory auditable and consolidatable after the fact. A memory system that stores these fields is AMR-compliant. Status: early draft.
+
+- [Specification](https://github.com/sleepsweet/auditable-memory-record): this repository, CC BY 4.0
+- [sleepsweet](https://github.com/sleepsweet/sleepsweet): engine + CLI, reference consumer of AMR records
+- [memory-hygiene-bench](https://github.com/sleepsweet/memory-hygiene-bench): benchmark for the cost of degraded agent memory
