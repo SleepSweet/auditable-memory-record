@@ -12,6 +12,10 @@ Copy the drop-in block from [memory-rules.md](memory-rules.md) — minimal (5 li
 
 Two reasons. First, any memory policy that can only keep or drop entries carries a provable residual-deficit floor — deleted material cannot be rebuilt when it turns out to be needed ([arXiv:2608.00303](https://arxiv.org/abs/2608.00303)). Second, marked history is a free audit trail: "what did the agent know on date X, and who changed it, when" is answerable only if nothing was deleted. So AMR records move through statuses (`active` → `superseded` / `corrected` / `quarantined` / `stale`) and are never removed.
 
+## Doesn't never deleting bloat the memory?
+
+The store grows; the agent's context does not. Only `active` records belong in the agent's working context — filtering by `status` is a deterministic field comparison (in a file memory, literally a grep), not an LLM call. For file memories like CLAUDE.md, periodically moving `[superseded]` and `[corrected]` lines into an archive file is fully compliant: the specification forbids deletion as a way to express a status transition ([SPEC.md, section 2.6](SPEC.md#26-status)), not moving records between files. What it rules out is destroying history — which is irreversible ([arXiv:2608.00303](https://arxiv.org/abs/2608.00303)) and is exactly what time-scoped questions ("what was true on date X") depend on.
+
 ## How do I migrate existing memory?
 
 Paste the block from [memory-rules.md](memory-rules.md) into your CLAUDE.md / AGENTS.md, then tell your agent:

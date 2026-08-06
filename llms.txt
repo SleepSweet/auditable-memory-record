@@ -8,7 +8,7 @@ Status: v0.1-draft. License: CC BY 4.0. Adoption is copy-paste: a drop-in rules 
 - [Specification](SPEC.md): normative field set, conformance levels (AMR-Core, AMR-Extended), supersession vs. correction
 - [AMR-lite profile](amr-lite.md): human-readable single-line entries; AMR-lite + normalizer = AMR-Core
 - [Rationale](rationale.md): field-by-field grounding in published research
-- [FAQ](faq.md): adding rules to CLAUDE.md, two timestamps, mark-vs-delete, migration
+- [FAQ](faq.md): adding rules to CLAUDE.md, two timestamps, mark-vs-delete, store growth and archiving, migration
 - [JSON Schema](schema/amr.schema.json): validate records (draft 2020-12)
 - [Examples](examples/): record JSON, front-matter form, supersession chain
 
