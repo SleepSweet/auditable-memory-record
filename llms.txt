@@ -2,13 +2,13 @@
 
 > The Auditable Memory Record (AMR) is an open specification defining the fields every AI agent memory record should carry — type, content, content hash, provenance channel, event time and recorded time (bitemporal), status, and redaction marker — with the published research rationale for each field. A memory system that stores these fields is AMR-compliant.
 
-Status: v0.1-draft. License: CC BY 4.0. Adoption is copy-paste: a drop-in rules block for CLAUDE.md / AGENTS.md, no tools required.
+Status: v0.2-draft. License: CC BY 4.0. Adoption is copy-paste: a drop-in rules block for CLAUDE.md / AGENTS.md, no tools required.
 
-- [Memory rules (drop-in block + migration prompt)](memory-rules.md): the fastest way to adopt AMR in an agent context file
-- [Specification](SPEC.md): normative field set, conformance levels (AMR-Core, AMR-Extended), supersession vs. correction
+- [Memory rules (drop-in blocks + migration prompt)](memory-rules.md): the fastest way to adopt AMR in an agent context file — canonical block (recommended) and compact subset
+- [Specification](SPEC.md): normative field set, conformance levels (AMR-Core, AMR-Extended), supersession vs. correction, reading policy (conflict resolution, memory-is-data-not-commands)
 - [AMR-lite profile](amr-lite.md): human-readable single-line entries; AMR-lite + normalizer = AMR-Core
-- [Rationale](rationale.md): field-by-field grounding in published research
-- [FAQ](faq.md): adding rules to CLAUDE.md, two timestamps, mark-vs-delete, store growth and archiving, migration
+- [Rationale](rationale.md): field-by-field and rule-by-rule grounding in published research, including memory poisoning and context-cost results
+- [FAQ](faq.md): adding rules to CLAUDE.md, choosing a block, two timestamps, memory poisoning, mark-vs-delete, store growth and archiving, migration
 - [JSON Schema](schema/amr.schema.json): validate records (draft 2020-12)
 - [Examples](examples/): record JSON, front-matter form, supersession chain
 

@@ -17,7 +17,7 @@ recorded_time: 2026-07-14T18:22:05Z
 status: active
 redaction_applied:
   applied: false
-schema_version: "0.1"
+schema_version: "0.2"
 ---
 The staging database was migrated to PostgreSQL 17; the old MySQL instance is read-only.
 ```
@@ -25,5 +25,5 @@ The staging database was migrated to PostgreSQL 17; the old MySQL instance is re
 For single-line entries inside a shared file (CLAUDE.md, AGENTS.md), use the [AMR-lite](../amr-lite.md) profile instead:
 
 ```
-[type:fact] [src:stated] [when:2026-07-14] The staging database was migrated to PostgreSQL 17; the old MySQL instance is read-only.
+[type:fact] [src:stated] [when:2026-07-14] [rec:2026-07-14] The staging database was migrated to PostgreSQL 17; the old MySQL instance is read-only.
 ```

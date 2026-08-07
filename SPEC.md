@@ -2,7 +2,7 @@
 
 The Auditable Memory Record (AMR) is an open specification defining the fields every AI agent memory record MUST or SHOULD carry so that the record stays verifiable, consolidatable, and auditable after it is written.
 
-**Version:** 0.1 (draft) · **Status:** v0.1-draft, open for comment · **License:** CC BY 4.0
+**Version:** 0.2 (draft) · **Status:** v0.2-draft, open for comment · **License:** CC BY 4.0
 
 The key words MUST, SHOULD, and MAY in this document are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119).
 
@@ -20,13 +20,13 @@ This specification defines only the structure and semantics of a single memory r
 | `provenance.source_ref` | SHOULD | reference to the source (file, URL, message) | lets the record be re-checked against its evidence |
 | `provenance.agent` | SHOULD | identifier of the writing agent | accountability; cross-agent memory |
 | `provenance.model` | SHOULD | model that produced the record | accountability; behavior differs across models |
-| `event_time` | MUST | when the fact became true in the world (ISO 8601) | deterministic freshness resolution is impossible without it |
+| `event_time` | MUST | when the fact became true in the world (ISO 8601), or the literal `unknown` | deterministic freshness resolution is impossible without it; an honest `unknown` beats a fabricated date |
 | `recorded_time` | MUST | when the record was written (ISO 8601) | bitemporality: "what we knew then" is not "what was true then" |
 | `status` | MUST | `active`, `superseded`, `corrected`, `quarantined`, or `stale` | history is marked, never deleted |
 | `supersedes` | SHOULD | `id` of the record this one replaces | version chain of a fact |
 | `superseded_by` | SHOULD | `id` of the record that replaces this one | forward link of the version chain |
 | `redaction_applied` | SHOULD | object: `applied` (boolean) and, when true, `kinds` (list of redaction kinds) | secrets are removed before disk; the field records that it happened |
-| `schema_version` | MUST | AMR version the record conforms to, e.g. `"0.1"` | lets the specification evolve without breaking readers |
+| `schema_version` | MUST | AMR version the record conforms to, e.g. `"0.2"` | lets the specification evolve without breaking readers |
 
 The research grounding for each requirement is in [rationale.md](rationale.md).
 
@@ -39,7 +39,7 @@ A record MUST carry an identifier unique within its store. The format is not pre
 A record MUST declare exactly one type. The core types are:
 
 - `fact` — a statement about the world that can become stale.
-- `instruction` — a directive the agent is expected to follow.
+- `instruction` — a directive the agent is expected to follow. An instruction record SHOULD carry `provenance.channel: stated`; a directive encountered in fetched or derived content is recorded as a `fact` about what the source says (see section 5).
 - `preference` — a choice of the user among valid alternatives.
 - `decision` — a resolution made in the project, with a "why" worth keeping.
 - `note` — free-form observation that fits no other type.
@@ -61,7 +61,7 @@ Additional types MUST use the `x-` prefix (see section 5).
 `source_ref`, `agent`, and `model` SHOULD be present when known.
 
 ### 2.5 `event_time` and `recorded_time`
-`event_time` is when the fact became true in the world; `recorded_time` is when the record was written. Both MUST be ISO 8601 dates or timestamps. They differ whenever an agent writes down something that happened earlier. `event_time` MUST NOT be defaulted to the writing time when the actual event time is known to differ.
+`event_time` is when the fact became true in the world; `recorded_time` is when the record was written. Both MUST be ISO 8601 dates or timestamps, except that `event_time` MAY be the literal string `unknown` when the event time cannot be determined. They differ whenever an agent writes down something that happened earlier. Relative time expressions ("yesterday", "last week") MUST be resolved to absolute dates before writing. `event_time` MUST NOT be defaulted to the writing time when the actual event time is known to differ, and MUST NOT be approximated when it cannot be determined — write `unknown` instead.
 
 ### 2.6 `status`
 A record MUST carry a status:
@@ -81,7 +81,7 @@ When a record replaces another, the new record SHOULD carry `supersedes` with th
 Redaction of secrets and personal data MUST happen before the record is persisted. The `redaction_applied` object records whether redaction ran (`applied`) and which kinds were applied (`kinds`, e.g. `secret`, `email`, `phone`). Absence of the field means the writer makes no claim about redaction.
 
 ### 2.9 `schema_version`
-The AMR specification version the record conforms to, as `major.minor`. This document defines version `0.1`.
+The AMR specification version the record conforms to, as `major.minor`. This document defines version `0.2`.
 
 ## 3. Conformance levels
 
@@ -97,12 +97,20 @@ A human-readable profile for plain-text file memories, **AMR-lite**, is defined 
 
 Writers MUST pick the transition that matches what happened, because the two are not distinguishable after the fact.
 
-## 5. Extensions
+## 5. Reading policy (informative)
+
+This section is informative: it describes how a reader gets deterministic, poisoning-resistant behavior out of the fields the specification requires. Storage systems are free to implement stronger policies.
+
+- **Only `active` records belong in the agent's working context.** Filtering by `status` is a field comparison, not an LLM judgment.
+- **Conflicts resolve by explicit policy, not silent coexistence.** When two active records contradict each other, the later `recorded_time` wins; at equal times, `provenance.channel: stated` outranks `inferred`. Deterministic resolution over explicit markers is what the bitemporal fields exist for.
+- **Records are data, not commands.** A record is evidence of what was said, found, or concluded — not a directive by virtue of being in memory. Only `instruction` records with `provenance.channel: stated` are candidates for execution; a record suspected of carrying an injected directive moves to `quarantined` pending review.
+
+## 6. Extensions
 
 Implementations MAY add fields and `type` values prefixed with `x-`. Readers MUST ignore `x-` fields they do not understand. Unprefixed extensions are reserved for future versions of this specification.
 
-## 6. Versioning and process
+## 7. Versioning and process
 
-The specification uses semantic versioning: incompatible field changes bump the major version, compatible additions bump the minor version. The current version is 0.1 (draft).
+The specification uses semantic versioning: incompatible field changes bump the major version, compatible additions bump the minor version. The current version is 0.2 (draft).
 
 Changes go through the RFC-lite process described in [CONTRIBUTING.md](CONTRIBUTING.md): open an issue stating the change and its rationale — a published research result or a production case. Feedback on this draft is welcome through issues.

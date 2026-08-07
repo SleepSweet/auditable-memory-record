@@ -17,7 +17,7 @@
     "redaction_applied": {
       "applied": false
     },
-    "schema_version": "0.1"
+    "schema_version": "0.2"
   },
   {
     "id": "67cb1b2d-9e38-40fd-997a-46575cc76c4c",
@@ -37,6 +37,6 @@
     "redaction_applied": {
       "applied": false
     },
-    "schema_version": "0.1"
+    "schema_version": "0.2"
   }
 ]
