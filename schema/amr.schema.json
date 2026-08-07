@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/sleepsweet/auditable-memory-record/main/schema/amr.schema.json",
   "title": "Auditable Memory Record",
-  "description": "A single AI agent memory record per the AMR specification v0.2. Required fields are AMR-Core; required plus all optional fields are AMR-Extended.",
+  "description": "A single AI agent memory record per the AMR specification v0.3. Required fields are AMR-Core; required plus all optional fields are AMR-Extended.",
   "type": "object",
   "properties": {
     "id": {
@@ -102,7 +102,6 @@
     "id",
     "type",
     "content",
-    "content_hash",
     "provenance",
     "event_time",
     "recorded_time",

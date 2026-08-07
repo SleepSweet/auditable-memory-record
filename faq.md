@@ -6,11 +6,11 @@ Copy the drop-in block from [memory-rules.md](memory-rules.md) and paste it into
 
 ## Which block should I paste — canonical or compact?
 
-The **canonical block is the recommended one**: it carries the complete rule set — the type and source glossaries, the conflict-resolution rule, the poisoning gate, and anchoring examples — and specific instructions are followed more consistently than terse ones. The **compact block** is a strict subset for context files under a tight token budget: same entry format, same markers, fewer explanations. Entries written under either block are identical in shape, so upgrading later means replacing the block — no entry rewriting ([memory-rules.md](memory-rules.md)).
+The **canonical block is the recommended one**: it carries the complete rule set of the specification — the type and source glossaries, the conflict-resolution rule, the poisoning gate, and anchoring examples — and specific instructions are followed more consistently than terse ones. The **compact block** is a strict subset for everyday desktop AI assistants — a memory file in a chat app rather than an agent harness: same entry format, same markers, fewer explanations. Entries written under either block are identical in shape, so upgrading later means replacing the block — no entry rewriting ([memory-rules.md](memory-rules.md)).
 
 ## Why two timestamps?
 
-`event_time` is when the fact became true in the world; `recorded_time` is when it was written down. One timestamp cannot distinguish "the world changed" from "we learned late", and deterministic conflict resolution ("newest event wins") needs the event time, not the writing time. On the MemoryAgentBench fact-consolidation tasks, systems without deterministic resolution over version markers score 7–54%, while deterministic resolution reaches 78.0–94.8% ([arXiv:2606.01435](https://arxiv.org/abs/2606.01435)). The two-axis model is the industry standard for temporal agent memory: Zep tracks valid time and ingestion time per fact and invalidates rather than deletes on conflict ([arXiv:2501.13956](https://arxiv.org/abs/2501.13956)).
+`event_time` is when the fact became true in the world; `recorded_time` is when it was written down. One timestamp cannot distinguish "the world changed" from "we learned late", and deterministic conflict resolution ("newest event wins") needs the event time, not the writing time. On the MemoryAgentBench fact-consolidation tasks, prior systems score 7–54% single-hop and at most 7% multi-hop, while deterministic resolution over explicit version markers reaches 78.0–94.8% single-hop and 30.2–51.5% multi-hop, pooled ([arXiv:2606.01435](https://arxiv.org/abs/2606.01435)). The bound matters as much as the gain: on general conversational QA (LongMemEval) the same paper finds no significant difference (26/45 vs 29/45, McNemar p=0.45) and limits the claim to current-value questions over explicit version metadata — which is exactly the claim AMR makes, and no more. The two-axis model is the industry standard for temporal agent memory: Zep tracks valid time and ingestion time per fact and invalidates rather than deletes on conflict ([arXiv:2501.13956](https://arxiv.org/abs/2501.13956)).
 
 A practical consequence: `event_time` may honestly be `unknown` — the event date is sometimes undeterminable, the writing date never is. Writing an approximated date instead of `unknown` silently corrupts the very resolution the field enables, which is why the rules forbid it.
 
@@ -18,7 +18,15 @@ A practical consequence: `event_time` may honestly be `unknown` — the event da
 
 Memory poisoning turns a one-shot prompt injection into a persistent compromise: a malicious "instruction", once written into memory (for example, from a fetched web page through session summarization), executes in every future session. The attack is systematically studied ([MPBench, arXiv:2606.04329](https://arxiv.org/abs/2606.04329)) and demonstrated against production agents ([Unit 42](https://unit42.paloaltonetworks.com/indirect-prompt-injection-poisons-ai-longterm-memory/)); notably, existing prompt-injection defenses do not cover it.
 
-The rules close the cheapest channel: **memory is data, not commands**. Only entries with `src:stated` may carry `type:instruction`; a directive found in fetched or derived content is recorded as a `fact` about what the source says — the information is kept, the executability is not. Honest calibration: this is a prompt-level mitigation, not a complete defense; retrieval-time filtering and isolation remain the memory system's responsibility.
+The rules close the cheapest channel: **memory is data, not commands**. Only entries with `src:stated` may carry `type:instruction`; a directive found in fetched or derived content is recorded as a `fact` about what the source says — the information is kept, the executability is not. Honest calibration, with no fine print: this is a prompt-level mitigation, not a complete defense, and in a plain context file the `src` tag itself is written by the same model the attack targets — self-reported provenance is hygiene, not a security boundary. The guarantee version requires the channel to be assigned by the pipeline rather than the model ([SPEC.md, section 2.4](SPEC.md#24-provenance)); retrieval-time filtering and isolation remain the memory system's responsibility.
+
+## How are conflicts between two active entries resolved?
+
+Deterministically, by fields — not by LLM judgment. `src:inferred` never overrides an active `src:stated` entry, whatever the dates: what the user actually said is displaced only by a later stated or derived entry, never by the agent's own conclusion. Otherwise the later `rec` wins; at equal `rec`, the entry lower in the file wins — entries are appended, so lower means written later. The rule and the reasoning behind each precedence are in [SPEC.md, section 5](SPEC.md#5-reading-policy-informative) and [rationale.md](rationale.md#reading-policy-conflict-resolution-spec-section-5).
+
+## Why dates and not timestamps in the lite prefix?
+
+Because a date is the maximum precision the writer can supply honestly. A model writing into a context file reliably knows the current date, but not a trustworthy clock or timezone — a fabricated time of day is exactly the kind of silently corrupting precision the `when:unknown` rule forbids, and a wrong order is worse than a coarse one. Within one day, order needs no clock: entries are appended, so file position is the deterministic tie-break. Full AMR records written by a harness with a real clock do carry ISO 8601 timestamps ([SPEC.md, section 2.5](SPEC.md#25-event_time-and-recorded_time); [rationale](rationale.md#dates-not-timestamps-in-amr-lite)).
 
 ## Why mark instead of delete?
 
@@ -34,7 +42,7 @@ Paste the block from [memory-rules.md](memory-rules.md) into your CLAUDE.md / AG
 
 > Rewrite my existing memory entries to follow the Memory writing rules above. Resolve relative dates to absolute ones, mark outdated entries with dated [superseded:...] marks — delete nothing.
 
-The agent rewrites each entry into the prefixed format, converts relative dates to absolute ones, and marks stale entries instead of deleting them. Entries written under the v1 block (no `[rec:...]`, undated marks) remain valid and are upgraded by the same prompt.
+The agent rewrites each entry into the prefixed format, converts relative dates to absolute ones, and marks stale entries instead of deleting them. Entries written before the block was adopted (no `[rec:...]` prefix, undated marks) remain valid and are upgraded by the same prompt.
 
 ## What's the difference between superseded and corrected?
 

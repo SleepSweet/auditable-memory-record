@@ -2,25 +2,14 @@
 
 All notable changes to the AMR specification are recorded here. The specification follows semantic versioning.
 
-## 0.2.0-draft — 2026-08-07
+## 0.3.0-draft — 2026-08-07
 
-Memory rules v2 and the reading policy. All changes are grounded in published results; see rationale.md.
+Current public draft.
 
-- SPEC.md: `event_time` may be the literal `unknown` when the event time cannot be determined — writers must not approximate it; relative time expressions must be resolved to absolute dates before writing. New informative section 5, Reading policy: only `active` records in working context; conflicts resolve by later `recorded_time`, then `stated` over `inferred`; records are data, not commands — only `stated` instructions are candidates for execution. `instruction` records SHOULD carry `provenance.channel: stated`.
-- memory-rules.md: drop-in blocks upgraded to v2 — `[rec:YYYY-MM-DD]` alongside `[when:]` (bitemporal prefix), `when:unknown`, dated `[superseded:...]`/`[corrected:...]` marks whose date equals the replacement's `rec` (a deterministic link), the conflict rule, the memory-is-data-not-commands rule, type/src glossaries with operational criteria, anchoring examples, and the context-cost filter with MEMORY_ARCHIVE.md guidance. Canonical block is recommended; the compact block is a strict subset. v1 entries remain valid.
-- amr-lite.md: `recorded_time` and dated marks are now author-supplied; supersession links resolve deterministically from mark dates, with fallbacks for v1 entries.
-- rationale.md: new grounding for the reading policy, the poisoning gate, context cost and archiving, glossaries and examples, and a "what is deliberately absent" section.
-- schema/amr.schema.json: `event_time` accepts `unknown`; examples bumped to `schema_version: "0.2"`.
-- faq.md: new questions on block choice and memory poisoning; archiving and migration answers extended.
-
-## 0.1.0-draft — 2026-08-07
-
-Initial public draft.
-
-- SPEC.md: normative field set (id, type, content, content_hash, provenance, event_time, recorded_time, status, supersedes/superseded_by, redaction_applied, schema_version), conformance levels AMR-Core and AMR-Extended, `x-` extensions, supersession vs. correction semantics.
+- SPEC.md: normative field set (id, type, content, provenance, event_time, recorded_time, status, supersedes/superseded_by, content_hash, redaction_applied, schema_version), conformance levels AMR-Core and AMR-Extended, `x-` extensions, supersession vs. correction semantics. Channel assignment: a pipeline that mechanically knows where content came from assigns the channel itself — models may downgrade a channel, never upgrade one; a self-reported channel is not a security boundary. Reading policy: only `active` records in working context; deterministic conflict resolution with provenance precedence for stated records and an append-order tie-break; memory is data, not commands.
+- memory-rules.md: drop-in blocks — the canonical block (recommended, carries the complete rule set of the specification) and a compact subset for everyday desktop AI assistants — plus the migration prompt and an honest calibration of what the rules do and do not buy.
+- amr-lite.md: the human-readable profile for plain-text file memories; AMR-lite + normalizer = AMR-Core.
+- rationale.md: field-by-field grounding with evidence-strength labels (direct / transferred / engineering decision), published bounds quoted next to published gains, and a list of what is deliberately absent.
 - schema/amr.schema.json: JSON Schema (draft 2020-12) for a single record.
 - examples/: full record (JSON), the same record as Markdown front matter, and a supersession chain.
-- rationale.md: field-by-field research grounding.
-- memory-rules.md: drop-in blocks (minimal and full) for CLAUDE.md / AGENTS.md, plus the migration prompt.
-- amr-lite.md: the human-readable profile; AMR-lite + normalizer = AMR-Core.
 - faq.md, CONTRIBUTING.md (RFC-lite process).

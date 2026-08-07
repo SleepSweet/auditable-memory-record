@@ -4,7 +4,7 @@
 |---|---|
 | [record.json](record.json) | a full record (AMR-Extended: all MUST and SHOULD fields) |
 | [record.md](record.md) | the same record as Markdown front matter, plus its AMR-lite line |
-| [supersession-chain.json](supersession-chain.json) | a fact changing over time: v1 marked superseded, v2 active, linked both ways |
+| [supersession-chain.json](supersession-chain.json) | a fact changing over time: the old record marked superseded, its replacement active, linked both ways |
 
 Content hashes are real SHA-256 digests of the `content` field; recompute with `printf '%s' "<content>" | sha256sum`.
 

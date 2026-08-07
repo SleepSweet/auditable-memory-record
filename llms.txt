@@ -2,7 +2,7 @@
 
 > The Auditable Memory Record (AMR) is an open specification defining the fields every AI agent memory record should carry — type, content, content hash, provenance channel, event time and recorded time (bitemporal), status, and redaction marker — with the published research rationale for each field. A memory system that stores these fields is AMR-compliant.
 
-Status: v0.2-draft. License: CC BY 4.0. Adoption is copy-paste: a drop-in rules block for CLAUDE.md / AGENTS.md, no tools required.
+Status: v0.3-draft. License: CC BY 4.0. Adoption is copy-paste: a drop-in rules block for CLAUDE.md / AGENTS.md, no tools required.
 
 - [Memory rules (drop-in blocks + migration prompt)](memory-rules.md): the fastest way to adopt AMR in an agent context file — canonical block (recommended) and compact subset
 - [Specification](SPEC.md): normative field set, conformance levels (AMR-Core, AMR-Extended), supersession vs. correction, reading policy (conflict resolution, memory-is-data-not-commands)

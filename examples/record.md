@@ -17,7 +17,7 @@ recorded_time: 2026-07-14T18:22:05Z
 status: active
 redaction_applied:
   applied: false
-schema_version: "0.2"
+schema_version: "0.3"
 ---
 The staging database was migrated to PostgreSQL 17; the old MySQL instance is read-only.
 ```
